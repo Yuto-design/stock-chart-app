@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Stock Chart App</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <h1>Stock Chart</h1>
+
+    <div class="controls">
+        <input type="text" id="symbol" value="AAPL">
+        <select id="period">
+            <option value="1mo">1ヶ月</option>
+            <option value="3mo">3ヶ月</option>
+            <option value="6mo" selected>6ヶ月</option>
+            <option value="1y">1年</option>
+        </select>
+        <button id="load">表示</button>
+    </div>
+
+    <div id="chart"></div>
+
+    <script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

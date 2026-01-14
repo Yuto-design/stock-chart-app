@@ -51,12 +51,12 @@ stock-chart-app/
 
 ## セットアップ
 
-1. Python 環境構築
+1. Python 環境構築（macOS）
 <pre><code>
-pip install fastapi uvicorn yfinance pandas
+pip3 install fastapi uvicorn yfinance pandas
 </code></pre>
 
-2. バックエンド起動
+2. バックエンド起動（macOS）
 <pre><code>
 cd backend
 uvicorn main:app --reload
@@ -65,6 +65,23 @@ uvicorn main:app --reload
 <pre><code>
 http://127.0.0.1:8000
 </code></pre>
+
+> [!NOTE]
+> Windowsの場合
+> 1. Python 環境構築
+> <pre><code>
+> pip install fastapi uvicorn yfinance pandas
+> </code></pre>
+
+> 2. バックエンド起動
+> <pre><code>
+> cd backend
+> uvicorn main:app --reload
+> </code></pre>
+> 起動後：
+> <pre><code>
+> http://127.0.0.1:8000
+> </code></pre>
 
 3. フロントエンド起動
 - `frontend/index.html` をブラウザで開く

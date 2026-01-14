@@ -21,11 +21,21 @@ const candleSeries = chart.addSeries(
     LightweightCharts.CandlestickSeries
 );
 
-const lineSeries = chart.addSeries(
+const closeLineSeries = chart.addSeries(
     LightweightCharts.LineSeries,
     {
         lineWidth: 2,
     }
+);
+
+const sma5Series = chart.addSeries(
+    LightweightCharts.LineSeries,
+    { lineWidth: 2, color: "red" }
+);
+
+const sma25Series = chart.addSeries(
+    LightweightCharts.LineSeries,
+    { lineWidth: 2, color: "green" }
 );
 
 async function loadStock() {
@@ -44,13 +54,14 @@ async function loadStock() {
     const data = await res.json();
 
     candleSeries.setData(data.candles);
-
-    const closeLine = data.candles.map(c => ({
+    closeLineSeries.setData(
+        data.candles.map(c => ({
         time: c.time,
         value: c.close,
-    }));
+    })));
 
-    lineSeries.setData(closeLiine);
+    sma5Series.setData(data.sma5);
+    sma25Series.setData(data.sma25);
 
     chart.timeScale().fitContent();
 }

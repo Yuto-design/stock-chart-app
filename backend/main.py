@@ -22,5 +22,5 @@ def read_stock(symbol: str, period: str = "1y"):
     return {
         "symbol": symbol,
         "period": period,
-        "candles": data
+        **data
     }

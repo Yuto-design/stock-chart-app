@@ -10,64 +10,62 @@
 </head>
 <body>
 
-    <h1>株価チャート</h1>
+<div class="app">
+    <header class="controls">
 
-    <div class="controls">
-        <label>
-            銘柄:
-            <input type="text" id="symbol" value="AAPL" />
-        </label>
+        <h1>📈 株価チャート</h1>
 
-        <label>
-            期間:
-            <select id="period">
-                <option value="1mo">1ヶ月</option>
-                <option value="3mo">3ヶ月</option>
-                <option value="6mo" selected>6ヶ月</option>
-                <option value="1y">1年</option>
-                <option value="2y">2年</option>
-            </select>
-        </label>
-
-        <button id="load">表示</button>
-
-        <div class="sma-toggles">
+        <div class="control-row">
             <label>
-                SMA期間:
+                銘柄
+                <input type="text" id="symbol" value="AAPL" />
+            </label>
+
+            <label>
+                期間
+                <select id="period">
+                    <option value="1mo">1ヶ月</option>
+                    <option value="3mo">3ヶ月</option>
+                    <option value="6mo" selected>6ヶ月</option>
+                    <option value="1y">1年</option>
+                    <option value="2y">2年</option>
+                </select>
+            </label>
+
+            <button id="load">表示</button>
+        </div>
+
+        <div class="control-row indicators">
+            <label>
+                SMA
                 <input type="number" id="smaPeriod" value="25" min="1" />
-            </label>
-
-            <label>
                 <input type="checkbox" id="smaToggle" checked />
-                SMA表示
             </label>
 
-        </div>
-
-        <div class="ema-toggles">
             <label>
-                EMA期間:
+                EMA
                 <input type="number" id="emaPeriod" value="25" min="1" />
-            </label>
-
-            <label>
                 <input type="checkbox" id="emaToggle" checked />
-                EMA表示
             </label>
         </div>
-    </div>
 
-    <div id="legend" class="legend">
-        <span id="legend-sma" class="legend-item sma">
-            SMA(<span id="legend-sma-period"></span>)
-        </span>
-        <span id="legend-ema" class="legend-item ema">
-            EMA(<span id="legend-ema-period"></span>)
-        </span>
-    </div>
+        <div id="legend" class="legend">
+            <span id="legend-sma" class="legend-item sma">
+                SMA(<span id="legend-sma-period"></span>)
+            </span>
+            <span id="legend-ema" class="legend-item ema">
+                EMA(<span id="legend-ema-period"></span>)
+            </span>
+        </div>
 
-    <div id="chart"></div>
+    </header>
 
-    <script src="./app.js"></script>
+    <main class="chart-area">
+        <div id="chart"></div>
+    </main>
+
+</div>
+
+<script src="app.js"></script>
 </body>
 </html>

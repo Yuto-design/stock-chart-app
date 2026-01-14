@@ -1,13 +1,12 @@
 import yfinance as yf
 import pandas as pd
 
-def calculate_sma(series: pd.Series, window: int):
-    return series.rolling(window=window).mean()
-
-def calculate_ema(series: pd.Series, span: int):
-    return series.ewm(span=span, adjust=False).mean()
-
-def get_stock_data(symbol: str, period: str = "1y"):
+def get_stock_data(
+    symbol: str,
+    period: str,
+    sma_period: int,
+    ema_period: int,
+):
     ticker = yf.Ticker(symbol)
     df = ticker.history(period=period)
 
@@ -16,18 +15,15 @@ def get_stock_data(symbol: str, period: str = "1y"):
 
     df.reset_index(inplace=True)
 
-    df["sma5"] = calculate_sma(df["Close"], 5)
-    df["sma25"] = calculate_sma(df["Close"], 25)
+    sma_col = f"sma_{sma_period}"
+    ema_col = f"ema_{ema_period}"
 
-    df["ema5"] = calculate_ema(df["Close"], 5)
-    df["ema25"] = calculate_ema(df["Close"], 25)
+    df[sma_col] = df["Close"].rolling(window=sma_period).mean()
+    df[ema_col] = df["Close"].ewm(span=ema_period, adjust=False).mean()
 
     candles = []
-    sma5 = []
-    sma25 = []
-
-    ema5 = []
-    ema25 = []
+    sma_data = []
+    ema_data = []
 
     for _, row in df.iterrows():
         time = row["Date"].strftime("%Y-%m-%d")
@@ -40,34 +36,20 @@ def get_stock_data(symbol: str, period: str = "1y"):
             "close": round(row["Close"], 2),
         })
 
-        if not pd.isna(row["sma5"]):
-            sma5.append({
+        if not pd.isna(row[sma_col]):
+            sma_data.append({
                 "time": time,
-                "value": round(row["sma5"], 2),
+                "value": round(row[sma_col], 2),
             })
 
-        if not pd.isna(row["sma25"]):
-            sma25.append({
+        if not pd.isna(row[ema_col]):
+            ema_data.append({
                 "time": time,
-                "value": round(row["sma25"], 2),
-            })
-
-        if not pd.isna(row["ema5"]):
-            ema5.append({
-                "time": time,
-                "value": round(row["ema5"], 2),
-            })
-
-        if not pd.isna(row["ema25"]):
-            ema25.append({
-                "time": time,
-                "value": round(row["ema25"], 2),
+                "value": round(row[ema_col], 2),
             })
 
     return {
         "candles": candles,
-        "sma5": sma5,
-        "sma25": sma25,
-        "ema5": ema5,
-        "ema25": ema25
+        "sma": sma_data,
+        "ema": ema_data,
     }

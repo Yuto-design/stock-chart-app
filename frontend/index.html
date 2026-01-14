@@ -1,46 +1,73 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="UTF-8" />
     <title>Stock Chart App</title>
-    <link rel="stylesheet" href="styles.css">
+
+    <script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
+
+    <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-    <h1>Stock Chart</h1>
+
+    <h1>株価チャート</h1>
 
     <div class="controls">
-        <input type="text" id="symbol" value="AAPL">
-        <select id="period">
-            <option value="1mo">1ヶ月</option>
-            <option value="3mo">3ヶ月</option>
-            <option value="6mo" selected>6ヶ月</option>
-            <option value="1y">1年</option>
-        </select>
+        <label>
+            銘柄:
+            <input type="text" id="symbol" value="AAPL" />
+        </label>
+
+        <label>
+            期間:
+            <select id="period">
+                <option value="1mo">1ヶ月</option>
+                <option value="3mo">3ヶ月</option>
+                <option value="6mo" selected>6ヶ月</option>
+                <option value="1y">1年</option>
+                <option value="2y">2年</option>
+            </select>
+        </label>
 
         <button id="load">表示</button>
 
-        <label>
-            <input type="checkbox" id="sma5Toggle" checked>
-            SMA5
-        </label>
-        <label>
-            <input type="checkbox" id="sma25Toggle" checked>
-            SMA25
-        </label>
+        <div class="sma-toggles">
+            <label>
+                SMA期間:
+                <input type="number" id="smaPeriod" value="25" min="1" />
+            </label>
 
-        <label>
-            <input type="checkbox" id="ema5Toggle" checked>
-            EMA5
-        </label>
-        <label>
-            <input type="checkbox" id="ema25Toggle" checked>
-            EMA25
-        </label>
+            <label>
+                <input type="checkbox" id="smaToggle" checked />
+                SMA表示
+            </label>
+
+        </div>
+
+        <div class="ema-toggles">
+            <label>
+                EMA期間:
+                <input type="number" id="emaPeriod" value="25" min="1" />
+            </label>
+
+            <label>
+                <input type="checkbox" id="emaToggle" checked />
+                EMA表示
+            </label>
+        </div>
     </div>
 
-    <div id="chart"></div>
+    <div id="legend" class="legend">
+        <span id="legend-sma" class="legend-item sma">
+            SMA(<span id="legend-sma-period"></span>)
+        </span>
+        <span id="legend-ema" class="legend-item ema">
+            EMA(<span id="legend-ema-period"></span>)
+        </span>
+    </div>
 
-    <script src="https://unpkg.com/lightweight-charts/dist/lightweight-charts.standalone.production.js"></script>
-    <script src="app.js"></script>
+    <div id="chart" style="width: 100%; height: 500px;"></div>
+
+    <script src="./app.js"></script>
 </body>
 </html>

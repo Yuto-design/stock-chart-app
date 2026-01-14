@@ -13,14 +13,15 @@ app.add_middleware(
 )
 
 @app.get("/api/stock")
-def read_stock(symbol: str, period: str = "1y"):
-    data = get_stock_data(symbol, period)
-
-    if data is None:
-        raise HTTPException(status_code=404, detail="Stock data not found")
-
-    return {
-        "symbol": symbol,
-        "period": period,
-        **data
-    }
+def read_stock(
+    symbol: str,
+    period: str = "6mo",
+    sma_period: int = 25,
+    ema_period: int = 25,
+):
+    return get_stock_data(
+        symbol,
+        period,
+        sma_period,
+        ema_period,
+    )

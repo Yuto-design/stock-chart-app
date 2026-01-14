@@ -4,12 +4,12 @@ const chart = LightweightCharts.createChart(chartContainer, {
     width: chartContainer.clientWidth,
     height: 500,
     layout: {
-        backgroundColor: {color: "#ffffff"},
+        backgroundColor: { color: "#ffffff" },
         textColor: "#333",
     },
     grid: {
-        vertLines: {color: "#eee"},
-        horzLines: {color: "#eee"},
+        vertLines: { color: "#eee" },
+        horzLines: { color: "#eee" },
     },
     timeScale: {
         timeVisible: true,
@@ -17,65 +17,61 @@ const chart = LightweightCharts.createChart(chartContainer, {
     },
 });
 
-const candleSeries = chart.addSeries(
-    LightweightCharts.CandlestickSeries
-);
+const candleSeries = chart.addSeries(LightweightCharts.CandlestickSeries);
 
 const closeLineSeries = chart.addSeries(
     LightweightCharts.LineSeries,
-    {
-        lineWidth: 2,
-    }
+    { lineWidth: 1, color: "#999" }
 );
 
-const sma5Series = chart.addSeries(
+const smaSeries = chart.addSeries(
     LightweightCharts.LineSeries,
     { lineWidth: 2, color: "red" }
 );
 
-const sma25Series = chart.addSeries(
+const emaSeries = chart.addSeries(
     LightweightCharts.LineSeries,
-    { lineWidth: 2, color: "green" }
+    { lineWidth: 2, color: "blue" }
 );
 
-const ema5Series = chart.addSeries(
-    LightweightCharts.LineSeries,
-    { lineWidth: 2, color: "orange" }
-);
+let smaData = [];
+let emaData = [];
 
-const ema25Series = chart.addSeries(
-    LightweightCharts.LineSeries,
-    { lineWidth: 2, color: "purple" }
-);
+function updateIndicatorVisibility() {
+    const showSma = document.getElementById("smaToggle").checked;
+    const showEma = document.getElementById("emaToggle").checked;
 
-let sma5Data = [];
-let sma25Data = [];
-
-let ema5Data = [];
-let ema25Data = [];
-
-function updateSmaVisibility() {
-    const showSma5= document.getElementById("sma5Toggle").checked;
-    const showSma25 = document.getElementById("sma25Toggle").checked;
-
-    sma5Series.setData(showSma5 ? sma5Data : []);
-    sma25Series.setData(showSma25 ? sma25Data : []);
+    smaSeries.setData(showSma ? smaData : []);
+    emaSeries.setData(showEma ? emaData : []);
 }
 
-function updateEmaVisibility() {
-    const showEma5= document.getElementById("ema5Toggle").checked;
-    const showEma25 = document.getElementById("ema25Toggle").checked;
+function updateLegend() {
+    const smaPeriod = document.getElementById("smaPeriod").value;
+    const emaPeriod = document.getElementById("emaPeriod").value;
 
-    ema5Series.setData(showEma5 ? ema5Data : []);
-    ema25Series.setData(showEma25 ? ema25Data : []);
+    document.getElementById("legend-sma-period").textContent = smaPeriod;
+    document.getElementById("legend-ema-period").textContent = emaPeriod;
+
+    document.getElementById("legend-sma").style.display =
+        document.getElementById("smaToggle").checked ? "inline" : "none";
+
+    document.getElementById("legend-ema").style.display =
+        document.getElementById("emaToggle").checked ? "inline" : "none";
 }
+
 
 async function loadStock() {
     const symbol = document.getElementById("symbol").value;
     const period = document.getElementById("period").value;
+    const smaPeriod = document.getElementById("smaPeriod").value;
+    const emaPeriod = document.getElementById("emaPeriod").value;
 
     const res = await fetch(
-        `http://127.0.0.1:8000/api/stock?symbol=${symbol}&period=${period}`
+        `http://127.0.0.1:8000/api/stock` +
+        `?symbol=${symbol}` +
+        `&period=${period}` +
+        `&sma_period=${smaPeriod}` +
+        `&ema_period=${emaPeriod}`
     );
 
     if (!res.ok) {
@@ -86,28 +82,43 @@ async function loadStock() {
     const data = await res.json();
 
     candleSeries.setData(data.candles);
+
     closeLineSeries.setData(
         data.candles.map(c => ({
-        time: c.time,
-        value: c.close,
-    })));
+            time: c.time,
+            value: c.close,
+        }))
+    );
 
-    sma5Data= data.sma5;
-    sma25Data= data.sma25;
+    smaData = data.sma;
+    emaData = data.ema;
 
-    ema5Data= data.ema5;
-    ema25Data= data.ema25;
-
-    updateSmaVisibility();
-    updateEmaVisibility();
-
+    updateIndicatorVisibility();
     chart.timeScale().fitContent();
 }
 
 document.getElementById("load").addEventListener("click", loadStock);
-document.getElementById("sma5Toggle").addEventListener("change", updateSmaVisibility);
-document.getElementById("sma25Toggle").addEventListener("change", updateSmaVisibility);
-document.getElementById("ema5Toggle").addEventListener("change", updateEmaVisibility);
-document.getElementById("ema25Toggle").addEventListener("change", updateEmaVisibility);
+document.getElementById("smaToggle").addEventListener("change", updateIndicatorVisibility);
+document.getElementById("emaToggle").addEventListener("change", updateIndicatorVisibility);
+
+document.querySelectorAll('input[type="number"]').forEach(input => {
+    input.addEventListener("change", () => {
+        loadStock();
+        updateLegend();
+    });
+});
+
+document.getElementById("smaToggle")
+    .addEventListener("change", () => {
+        updateIndicatorVisibility();
+        updateLegend();
+    });
+
+document.getElementById("emaToggle")
+    .addEventListener("change", () => {
+        updateIndicatorVisibility();
+        updateLegend();
+    });
 
 loadStock();
+updateLegend();

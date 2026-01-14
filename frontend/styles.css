@@ -105,6 +105,8 @@ button:hover {
     flex: 1;
     position: relative;
     background: #ffffff;
+    overflow: hidden;
+    padding-bottom: 18px;
 }
 
 #chart {

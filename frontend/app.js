@@ -13,6 +13,11 @@ const chart = LightweightCharts.createChart(chartContainer, {
         timeVisible: true,
         secondsVisible: false,
     },
+    rightPriceScale: {
+        visible: true,
+        borderVisible: true,
+        minimumWidth: 70
+    }
 });
 
 const candleSeries = chart.addSeries(

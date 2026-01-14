@@ -13,7 +13,7 @@
 <div class="app">
     <header class="controls">
 
-        <h1>📈 株価チャート</h1>
+        <h1>株価チャート</h1>
 
         <div class="control-row">
             <label>
@@ -36,16 +36,16 @@
         </div>
 
         <div class="control-row indicators">
+            <input type="checkbox" id="smaToggle" checked />
             <label>
                 SMA
                 <input type="number" id="smaPeriod" value="25" min="1" />
-                <input type="checkbox" id="smaToggle" checked />
             </label>
 
             <label>
+                <input type="checkbox" id="emaToggle" checked />
                 EMA
                 <input type="number" id="emaPeriod" value="25" min="1" />
-                <input type="checkbox" id="emaToggle" checked />
             </label>
         </div>
 

@@ -72,7 +72,7 @@ http://127.0.0.1:8000
 > <pre><code>
 > pip install fastapi uvicorn yfinance pandas
 > </code></pre>
-
+>
 > 2. バックエンド起動
 > <pre><code>
 > cd backend

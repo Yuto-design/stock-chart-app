@@ -4,6 +4,9 @@ import pandas as pd
 def calculate_sma(series: pd.Series, window: int):
     return series.rolling(window=window).mean()
 
+def calculate_ema(series: pd.Series, span: int):
+    return series.ewm(span=span, adjust=False).mean()
+
 def get_stock_data(symbol: str, period: str = "1y"):
     ticker = yf.Ticker(symbol)
     df = ticker.history(period=period)
@@ -16,9 +19,15 @@ def get_stock_data(symbol: str, period: str = "1y"):
     df["sma5"] = calculate_sma(df["Close"], 5)
     df["sma25"] = calculate_sma(df["Close"], 25)
 
+    df["ema5"] = calculate_ema(df["Close"], 5)
+    df["ema25"] = calculate_ema(df["Close"], 25)
+
     candles = []
     sma5 = []
     sma25 = []
+
+    ema5 = []
+    ema25 = []
 
     for _, row in df.iterrows():
         time = row["Date"].strftime("%Y-%m-%d")
@@ -43,8 +52,22 @@ def get_stock_data(symbol: str, period: str = "1y"):
                 "value": round(row["sma25"], 2),
             })
 
+        if not pd.isna(row["ema5"]):
+            ema5.append({
+                "time": time,
+                "value": round(row["ema5"], 2),
+            })
+
+        if not pd.isna(row["ema25"]):
+            ema25.append({
+                "time": time,
+                "value": round(row["ema25"], 2),
+            })
+
     return {
         "candles": candles,
         "sma5": sma5,
-        "sma25": sma25
+        "sma25": sma25,
+        "ema5": ema5,
+        "ema25": ema25
     }

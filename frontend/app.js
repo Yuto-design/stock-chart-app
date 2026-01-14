@@ -38,8 +38,21 @@ const sma25Series = chart.addSeries(
     { lineWidth: 2, color: "green" }
 );
 
+const ema5Series = chart.addSeries(
+    LightweightCharts.LineSeries,
+    { lineWidth: 2, color: "orange" }
+);
+
+const ema25Series = chart.addSeries(
+    LightweightCharts.LineSeries,
+    { lineWidth: 2, color: "purple" }
+);
+
 let sma5Data = [];
 let sma25Data = [];
+
+let ema5Data = [];
+let ema25Data = [];
 
 function updateSmaVisibility() {
     const showSma5= document.getElementById("sma5Toggle").checked;
@@ -47,6 +60,14 @@ function updateSmaVisibility() {
 
     sma5Series.setData(showSma5 ? sma5Data : []);
     sma25Series.setData(showSma25 ? sma25Data : []);
+}
+
+function updateEmaVisibility() {
+    const showEma5= document.getElementById("ema5Toggle").checked;
+    const showEma25 = document.getElementById("ema25Toggle").checked;
+
+    ema5Series.setData(showEma5 ? ema5Data : []);
+    ema25Series.setData(showEma25 ? ema25Data : []);
 }
 
 async function loadStock() {
@@ -74,7 +95,11 @@ async function loadStock() {
     sma5Data= data.sma5;
     sma25Data= data.sma25;
 
+    ema5Data= data.ema5;
+    ema25Data= data.ema25;
+
     updateSmaVisibility();
+    updateEmaVisibility();
 
     chart.timeScale().fitContent();
 }
@@ -82,5 +107,7 @@ async function loadStock() {
 document.getElementById("load").addEventListener("click", loadStock);
 document.getElementById("sma5Toggle").addEventListener("change", updateSmaVisibility);
 document.getElementById("sma25Toggle").addEventListener("change", updateSmaVisibility);
+document.getElementById("ema5Toggle").addEventListener("change", updateEmaVisibility);
+document.getElementById("ema25Toggle").addEventListener("change", updateEmaVisibility);
 
 loadStock();

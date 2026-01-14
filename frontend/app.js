@@ -38,6 +38,17 @@ const sma25Series = chart.addSeries(
     { lineWidth: 2, color: "green" }
 );
 
+let sma5Data = [];
+let sma25Data = [];
+
+function updateSmaVisibility() {
+    const showSma5= document.getElementById("sma5Toggle").checked;
+    const showSma25 = document.getElementById("sma25Toggle").checked;
+
+    sma5Series.setData(showSma5 ? sma5Data : []);
+    sma25Series.setData(showSma25 ? sma25Data : []);
+}
+
 async function loadStock() {
     const symbol = document.getElementById("symbol").value;
     const period = document.getElementById("period").value;
@@ -60,11 +71,16 @@ async function loadStock() {
         value: c.close,
     })));
 
-    sma5Series.setData(data.sma5);
-    sma25Series.setData(data.sma25);
+    sma5Data= data.sma5;
+    sma25Data= data.sma25;
+
+    updateSmaVisibility();
 
     chart.timeScale().fitContent();
 }
 
 document.getElementById("load").addEventListener("click", loadStock);
+document.getElementById("sma5Toggle").addEventListener("change", updateSmaVisibility);
+document.getElementById("sma25Toggle").addEventListener("change", updateSmaVisibility);
+
 loadStock();
